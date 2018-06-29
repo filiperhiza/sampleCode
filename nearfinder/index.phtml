@@ -1,0 +1,263 @@
+<?php
+echo $this->render('topo.phtml'); ?>
+<div class="container">
+    <h1 class="h2 mb-0"><?php echo $this->titulo;?></h1>
+    <div class="col-md-8">
+        <?php if ( $this->Cidade && 1==2 ) { ?>
+            <?php
+            $num_limit = 10;
+            $Categoria = new Categoria();
+            $CatsTopo = $Categoria->getCatsTopo( @$this->Cidade->num_id, 60);
+            ?>
+            
+                <?php
+                $i = 1;
+                foreach( $CatsTopo as $cat) {
+                    if ( trim($cat->str_icon) == '' ) {
+                        continue;
+                    }
+                    ?>
+                    <div class="col-md-2 col-xs-4 text-center no-p-left no-p-right">
+                        <a href="/<?php echo LINK_BUSCA; ?>/<?php echo COMP_BUSCA . strtolower(friendlyUrl($cat->str_busca)) . "+" . $this->Estado->str_slug . "+" . $this->Cidade->str_slug; ?>.html" class="heading-sm">
+                            <i class="icon-custom icon-lg icon-color-blue fa <?php echo $cat->str_icon; ?>  rounded"></i> 
+                            <span class='display-block'><?php echo $cat->str_exibe; ?></span>
+                        </a>
+                    </div>
+                <?php
+                
+                    if ( $i++ >= $num_limit ) {
+                        break;
+                    }
+                } ?>
+            
+        <?php } ?>
+        <?
+        /*
+        <div class="publicidade">
+            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- Banner Index Top - Naim -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-2051305834842170"
+                 data-ad-slot="3772694525"
+                 data-ad-format="link"></ins>
+            <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+        */
+        ?>
+    <?php if ( $this->bln_index ) { ?>
+        <?php if ( !$this->Cidade && !$this->Estado ) { ?>
+            <h1 class="h2 mb-0"><?php echo $this->titulo;?></h1>
+        <?php
+        global $bln_cidades_index;
+        $bln_cidades_index = true;
+        echo $this->render('lista_cidades.phtml');
+        $bln_cidades_index = false;
+        
+        }
+        ?>
+                        
+        <?php
+        /*
+        <h1><?php echo $this->translate->_('Guia de Empresas GuiaJá, sua lista telefônica de serviços on-line'); ?></h1>
+        <?php if ( defined('LINK_YOUTUBE') ) { ?>
+            <div class="col-md-4 shadow-wrapper no-p-left">
+                <div class="box-shadow shadow-effect-2">
+                    <a href="javascript:void();"><img src="<?php echo Zend_Controller_Front::getInstance()->getParam('SITE_HTTP_STATIC'); ?>/public/default/images/<?php echo NOME_IMG_YOUTUBE; ?>.jpg" class="img-responsive pull-left img-bordered" data-toggle="modal" data-target=".bs-example-modal-lg" alt="<?php echo Zend_Controller_Front::getInstance()->getParam('EMPRESA_REMETENTE'); ?>" /></a>
+                </div>
+            </div>
+            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                            <h4 id="myLargeModalLabel" class="modal-title"><?php echo $this->translate->_('Conheça o GuiaJá'); ?></h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="responsive-video md-margin-bottom-40">
+                                <iframe width="100%" src="<?php echo LINK_YOUTUBE; ?>" frameborder="0" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
+        <p>
+            <?php echo $this->translate->_('Na Lista telefônica online Guiajá você encontra as melhores empresas do Brasil. Aqui você pode consultar nosso guia de endereços e encontrar empresas próximas de você. Além disto, você pode avaliar as empresas na lista, falando sobre a sua satisfação ou insatisfação com os serviços prestados por cada uma das empresas cadastradas no nosso guia de empresas.'); ?>
+        </p>
+        <h2><?php echo $this->translate->_('Vantagens do nosso guia de empresas'); ?></h2>
+        <p>
+            <?php echo $this->translate->_('Como usuário, você encontra telefones e endereços de contato de fornecedores, de empresas que prestam um serviço de qualidade e ainda pode qualificar qual foi a sua satisfação com aquela empresa. Isto permite com que você escolha somente as empresas mais bem qualificadas em nosso guia, uma empresa que está bem qualificada em nossa Lista Telefônica, com certeza é uma empresa que presta um serviço ou vende produtos de qualidade.<br /><br />Se você for uma empresa, você pode ser visto por mais de 600 mil usuários que passam pelo nosso site mensalmente, tendo destaque nas pesquisas que forem relevantes ao seu ramo de atuação.'); ?> 
+        </p>
+        <h3><?php echo $this->translate->_('Serviços do nosso guia de endereços'); ?></h3>
+        <p>
+            <?php echo $this->translate->_('Você também pode encontrar empresas cadastradas em nosso guia de endereços, todas as empresas são cadastradas por categorias, e isto facilita a sua procura pelas melhores empresas. Em nosso aplicativo para celular você ainda pode encontrar as empresas mais próximas de você por ramo de atuação. Já pensou em encontrar aquele hotel ou café mais perto de você quando você realmente precisa de um? <a href="/aplicativo">Baixe nosso aplicativo</a>.<br /><br /> Se você for uma empresa, também pode contratar um plano de anúncios para aparecer na frente das empresas que são cadastradas gratuitamente em nosso site. Não perca tempo, <a href="/anunciopatrocinado/planos">conheça nossos planos</a> de anúncio premium ou <a href="/empresa/cadastro">cadastre-se gratuitamente</a>'); ?>
+        </p>
+        */ ?>
+    <?php } ?>
+    </div>
+    <div class="col-md-8">
+    <?php if ( $this->Cidade && $this->Estado ) { ?>
+            <div class="clearfix"></div>
+            <?php
+            /*echo $this->previsao; */
+            ?>
+            <?php if ( !$this->bln_index && $this->Cidade->txt_descricao != '' && 1==2) { ?>
+                <?php if ( file_exists( $_SERVER['DOCUMENT_ROOT'] . PATH_IMG_CIDADE . friendlyUrl( $this->Cidade->str_nome . " " . $this->Estado->str_nome ) . ".jpg" ) ) { ?>
+                    <div class="col-md-6 no-p-left pull-left">
+                        <div class="shadow-wrapper">
+                            <div class="box-shadow shadow-effect-2">
+                                <img class="img-responsive img-100 img-bordered" src="<?php echo Zend_Controller_Front::getInstance()->getParam('SITE_HTTP_STATIC') . PATH_IMG_CIDADE . friendlyUrl( $this->Cidade->str_nome . " " . $this->Estado->str_nome ) . ".jpg"; ?>" />
+                            </div>
+                        </div>
+                    </div>
+                <?php } ?>
+                <p class="text-justify">
+                    <?php echo $this->Cidade->txt_descricao; ?>
+                </p>
+                <hr/>
+            <?php } ?>
+                <?php
+                $Cidade = new Cidade();
+                $rr_bairros = $Cidade->getBairros( $this->Cidade->num_id );
+                
+                if ( count( $rr_bairros ) ) { ?>
+                    <div class="headline"><h3><?php echo $this->translate->_('Bairros de') . " " . $this->Cidade->str_nome; ?></h3></div>
+                    <div class="row job-content <?php echo (( !IS_MOBILE && 1==2 )?' margin-bottom-40':''); ?>">
+                        <div class="col-md-4 col-xs-4">
+                            <ul class="list-unstyled categories">
+                                <?php
+                                $k = 1;
+                                $numero_por_coluna = ceil( count( $rr_bairros ) / 3);
+                                
+                                foreach( $rr_bairros as $bairro ) { ?>
+                                    <li><a href="/<?php echo LINK_BAIRRO . '/' . $bairro->str_slug . '+' . $this->Estado->str_slug . '+' . $this->Cidade->str_slug; ?>.html"><?php echo ucwords( strtolower( $bairro->str_nome ) ); ?></a> <?php if ( !IS_MOBILE && 1==2) { ?><small class="hex">(<?php echo $bairro->num_empresas; ?> <?php echo $this->translate->_('negócios'); ?>)</small> <? } ?></li>
+                                <?php 
+                                
+                                if ( $k++ >= $numero_por_coluna ) { ?>
+                                    </ul>
+                                </div>
+                                <div class="col-md-4 col-xs-4">
+                                    <ul class="list-unstyled categories">
+                                    <? 
+                                    $k = 1;
+                                }
+                            }?>
+                            </ul>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="text-center">
+                            <a href="/<?php echo LINK_BAIRRO_CIDADE . '/' . $this->Estado->str_slug . "+" . $this->Cidade->str_slug; ?>.html" class="btn-u rounded"><i class="fa fa-search"></i> <?php echo $this->translate->_('Todos os bairros'); ?></a>
+                        </div>
+                    </div>
+                <? }
+                //selecionando as principais categorias da cidade
+                ?>
+
+                
+            <?php
+            /*
+                <?php if ( $this->str_previsao_do_tempo_compacta ) : ?>
+                    <?php echo $this->str_previsao_do_tempo_compacta; ?>
+                <?php endif; ?>
+            */
+            ?>
+            <?php if ( $this->controller == 'index' || $this->controller == 'guia' ) :
+             if ( count( $this->cidades_mais_proximas_trocar ) ) { ?>
+
+                    <div class="col col-md-12 col-xs-12 no-p-left job-content">
+                        <div class="headline"><h3><?php echo $this->translate->_('Cidades próximas'); ?></h3></div>
+                        <div class="col-md-4 col-xs-4">
+                            <ul class="list-unstyled categories">
+                            <?php
+                            $k = 1;
+                            $numero_por_coluna = ceil( count( $this->cidades_mais_proximas_trocar ) / 3);
+                            
+                            foreach( $this->cidades_mais_proximas_trocar as $cidade ) { 
+                                $str_estado_url = $cidade->str_estado_url;
+                                $str_estado_slug = $cidade->str_estado_slug;
+                                ?>
+                                <li><a href="/<?php echo LINK_GUIA; ?>/<?php echo $cidade->str_estado_slug; ?>+<?php echo $cidade->str_slug; ?>.html" title="<?php echo $this->translate->_('Lista Telefônica de'); ?> <?php echo $cidade->str_nome; ?>"><i class="fa fa-angle-right"></i> <?php echo $cidade->str_nome; ?></a><?php if ( !IS_MOBILE && 1==2) { ?> <small class="hex text-gray">(<?php echo $cidade->num_empresas; ?> <?php echo $this->translate->_('negócios'); ?>)</small><? } ?></li>
+                            <?php 
+                            
+                            if ( $k++ >=$numero_por_coluna ) { ?>
+                                    </ul>
+                                </div>
+                                <div class="col-md-4 col-xs-4">
+                                    <ul class="list-unstyled categories">
+                                    <? 
+                                    $k = 1;
+                            }
+                        }?>
+                        </ul>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="text-center">
+                        <a href="/<?php echo LINK_ESTADO; ?>/<?php echo $str_estado_slug; ?>.html" class="btn-u rounded"><?php if ( !IS_MOBILE ) { ?><i class="fa fa-search"></i> <? } ?><?php echo $this->translate->_('Mais cidades'); ?></a>
+                    </div>
+                </div>
+                <?php } ?>
+            <?php endif; ?>
+            <?php
+            
+            /*
+            if ( $this->cidades_mais_proximas ) : ?>
+                <h2>Lista Telefônica das cidades mais próximas</h2>
+                    <ol class="listagem">
+                    <?php foreach( $this->cidades_mais_proximas as $cidade ) : ?>
+                        <li><a href="http://<?php echo SITE_HOST; ?>/lista/<?php echo $cidade->str_estado_slug; ?>+<?php echo $cidade->str_cidade_slug; ?>.html" title="Lista Telefônica <?php echo $this->escape(ucwords(strtolower($cidade->str_cidade_nome))); ?>, <?php echo $this->escape($cidade->str_estado_uf); ?>"><?php echo $this->escape(ucwords(strtolower($cidade->str_cidade_nome))); ?>, <?php echo $this->escape($cidade->str_estado_uf); ?></a></li>
+                    <?php endforeach; ?>
+                </ol>
+            <?php endif; 
+            
+            */
+            ?>
+            <div class="clearfix"></div>
+            <hr/>
+    <?php 
+    } else { ?>
+        
+    <?php } ?>
+    </div>
+    <div class="col col-md-4">
+        <?
+        $rr_melhores_emps = VWEmpresasPublicadas::getMelhoresEmps( @$this->Cidade->num_id );
+
+        if ( $rr_melhores_emps ) { ?>
+            <div class="posts">
+                <div class="headline headline-md"><h2><?php echo sprintf($this->translate->_('Melhores em <strong>%s</strong>'),$this->Cidade->str_nome) ; ?></h2></div>
+                <dl class="dl-horizontal">
+                <?php
+                $i = 1;
+                foreach( $rr_melhores_emps as $emp ) {
+                    
+                    if ( file_exists( $_SERVER['DOCUMENT_ROOT'] . PATH_LOGOS . "thumb_" . $emp->num_id . ".png" )  ) {
+                        $str_imagem = '/public/crop.php?w=100&s=/' . PATH_LOGOS . 'thumb_' . $emp->num_id . '.png';
+                    } else {
+                        $str_imagem = '/public/default/assets/img/map_icon.png';
+                    }
+                    
+                    $str_link = '/' . LINK_DADOS . '/' . $emp->str_slug;
+                    
+                    ?>
+                    <dt><a href="<?php echo $str_link; ?>" target="_blank"><img src="/public/crop.php?w=55&h=55&s=<?php echo $str_imagem; ?>" alt="<?php echo sprintf( $this->translate->_('%s em %s'), $empresa->str_nome, $empresa->str_cidade_nome ); ?>" class="rounded"></a></dt>
+                    <dd>
+                        <a href="<?php echo $str_link;?>"><?php echo $emp->str_nome; ?></a>
+                        <hr>
+                        <?php if ( $emp->media_score ) { ?>
+                            <?php echo getStars( $emp->media_score, "pull-left margin-right-10" ); ?>
+                        <?php } ?>
+                        <div class="pull-right"><?php echo (int)$emp->num_comentarios; ?> <?php echo $this->translate->_('avaliações'); ?></div>
+                    </dd>
+                <? } ?>
+                </dl>
+                </div>
+        <?php } else { ?>
+            &nbsp;
+        <?php } ?>
+    </div>
+</div>
+<div class="clearfix"></div>
+<?php echo $this->render('baixo.phtml'); ?>

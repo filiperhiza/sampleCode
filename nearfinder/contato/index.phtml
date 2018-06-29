@@ -1,0 +1,161 @@
+<?php echo $this->render('topo.phtml'); ?>
+</div>
+    <div class="shortcode-html"> <section class="g-bg-primary g-color-white g-pa-30" style="background-image: url(/public/default/assets/img/bg/pattern5.png);"> <div class="d-md-flex justify-content-md-center text-center"> <div class="align-self-md-center"> <p class="lead g-font-weight-400 g-mr-20--md g-mb-15 g-mb-0--md"><?php echo $this->translate->_('Já verificou a nossa central de ajuda? <br />A resposta para a sua pergunta pode estar lá!'); ?></p> </div> <div class="align-self-md-center"> <a class="btn btn-md u-btn-white" href="/perguntasfrequentes"><?php echo $this->translate->_('Perguntas frequentes'); ?></a> </div> </div> </section> </div>
+
+<div class="container content">
+    <div class="row margin-bottom-30">
+        <div class="col-md-9 mb-margin-bottom-30">
+            <div class="g-pos-rel g-z-index-1">
+          <!-- Heading -->
+              <div class="g-max-width-750 text-center mx-auto g-mb-100">
+                <h2 class="mb-4"><?php echo $this->translate->_('Fale com o GuiaJá'); ?></h2>
+                <p class="g-font-size-16 g-line-height-2"><?php echo $this->translate->_('Para maiores informações sobre nós e os nossos serviços, entre em contato conosco.'); ?></p>
+                <p class="g-font-size-16 g-line-height-2"><?php echo $this->translate->_('Todos os campos com <span class="obrigatorio">*</span> são obrigatórios.'); ?></p>
+              </div>
+              <!-- End Heading -->
+                  <div class="text-center mx-auto g-width-70x--md">
+                    <?php if( isset($this->retorno_contato) ){ ?>
+                        <div class="alert alert-danger" role="alert">
+                            <strong><?php echo $this->translate->_('Verifique os erros para prosseguir'); ?></strong></br>
+                            <?php foreach( $this->retorno_contato as $retorno ){ ?>
+                                <?php echo $retorno; ?><br />
+                            <?php } ?>
+                        </div>
+                    <?php } ?>
+                      <form action="/<?php echo $this->controller; ?>" method="post" id="sky-form3" class="sky-form">
+                        <div class="row">
+                          <div class="col-md-6 form-group g-mb-30">
+                            <div class="form-group <?php echo verificaErro('str_nome', $this->retorno_contato, 'g-pos-rel u-has-error-v1-3 g-mb-20', true); ?>">
+                                <input class="form-control g-color-gray-dark-v5 g-bg-white--focus g-brd-primary--focus rounded-0 g-py-13 g-px-15" type="text" name="str_nome" id="nome" value="<?php echo $this->retorno_form['str_nome'] ?>" placeholder="*<?php echo $this->translate->_('Nome'); ?>">
+                            </div>
+                          </div>
+
+                          <div class="col-md-6 form-group g-mb-30">
+                            <div class="form-group <?php echo verificaErro('str_email', $this->retorno_contato, 'g-pos-rel u-has-error-v1-3 g-mb-20', true); ?>">
+                                <input class="form-control g-color-gray-dark-v5 g-bg-white--focus g-brd-primary--focus rounded-0 g-py-13 g-px-15" type="text" name="str_email" id="email" value="<?php echo $this->retorno_form['str_email'] ?>" placeholder="<?php echo $this->translate->_('E-mail'); ?>">
+                            </div>
+                          </div>
+
+                          <div class="col-md-6 form-group g-mb-30">
+                                <input class="form-control g-color-gray-dark-v5 g-bg-white--focus g-brd-primary--focus rounded-0 g-py-13 g-px-15" type="text" name="str_nome_empresa" id="nome_empresa" value="<?php echo $this->retorno_form['str_nome_empresa'] ?>" placeholder="*<?php echo $this->translate->_('Nome da Empresa'); ?>">
+                          </div>
+
+                          <div class="col-md-6 form-group g-mb-30">
+                                <input class="form-control g-color-gray-dark-v5 g-bg-white--focus g-brd-primary--focus rounded-0 g-py-13 g-px-15" type="tel" name="str_telefone" id="telefone" value="<?php echo $this->retorno_form['str_telefone'] ?>" placeholder="<?php echo $this->translate->_('Telefone'); ?>">
+                          </div>
+
+                          <div class="col-md-12 form-group g-mb-30">
+                            <div class="form-group <?php echo verificaErro('str_assunto', $this->retorno_contato, 'g-pos-rel u-has-error-v1-3 g-mb-20', true); ?>">
+                                <input class="form-control g-color-gray-dark-v5 g-bg-white--focus g-brd-primary--focus rounded-0 g-py-13 g-px-15" type="text" name="str_assunto" id="assunto" value="<?php echo $this->retorno_form['str_assunto'] ?>" placeholder="<?php echo $this->translate->_('Assunto'); ?>">
+                            </div>
+                          </div>
+
+                          <div class="col-md-12 form-group g-mb-30">
+                            <div class="form-group <?php echo verificaErro('txt_mensagem', $this->retorno_contato, 'g-pos-rel u-has-error-v1-3 g-mb-20', true); ?>">
+                                <textarea class="form-control g-color-gray-dark-v5 g-bg-white--focus g-brd-primary--focus g-resize-none rounded-0 g-py-13 g-px-15" name="txt_mensagem" id="mensagem" rows="7" placeholder="<?php echo $this->translate->_('Mensagem'); ?>"></textarea>
+                            </div>
+                          </div>
+
+                        </div>
+                        <div class="col-md-12 form-group g-mb-30">
+                            <script src="https://www.google.com/recaptcha/api.js"></script>
+                            <div class="g-recaptcha" data-sitekey="6LeVCV4UAAAAAAYnybTF4COribzcVG1I_JxZfF_O"></div>
+                        </div>
+                        <div class="text-center">
+                          <button class="btn u-btn-primary text-uppercase rounded-0 g-px-25 g-py-13" type="submit" role="button"><?php echo $this->translate->_('Enviar'); ?></button>
+                        </div>
+                      </form>
+            </div>      
+        </div><!--/col-md-9-->
+    </div>
+</div>
+        <?php
+        /*
+        <li><i class="fa fa-home"></i>Rua Domingos Palmarim, 288</li>
+        <li><i class="fa"></i>Cravinhos - São Paulo - <?php echo $this->translate->_('Brasil') ; ?></li>
+        */
+        ?>
+        <?php /*<div class="col-md-3">
+            <!-- Contacts -->
+            <div class="headline"><h2><?php echo $this->translate->_('Contatos'); ?></h2></div>
+            <ul class="list-unstyled who margin-bottom-30">
+                <li><i class="fa fa-envelope"></i><?php echo Zend_Controller_Front::getInstance()->getParam('EMPRESA_EMAIL'); ?></li>
+                <?php if ( Zend_Controller_Front::getInstance()->getParam('SITE_TELEFONE') != '' ) { ?>
+                    <li><a href="#"><i class="fa fa-phone"></i><?php echo Zend_Controller_Front::getInstance()->getParam('SITE_TELEFONE'); ?></a></li>
+                <?php } ?>
+            </ul>
+        </div><!--/col-md-3-->
+        */?>   
+<?php
+
+/*require_once($_SERVER['DOCUMENT_ROOT'] . '/lib/Vold/PHPMailler/class.phpmailer.php');
+
+<?php echo $this->form; ?>
+        
+$teste = VWEmpresasPublicadas::montaEmailRelatorio('8471716',date('Y-m-d'),date('Y-m-d'),"relatorio");
+$str_titulo_email = "Seu Anúncio Premium expira em cinco dias.";
+$mail = new PHPMailer();  
+$mail->IsHTML (true);
+$mail->Host = "localhost";
+$mail->Mailer = "smtp";
+$mail->From = Zend_Controller_Front::getInstance()->getParam('EMAIL_PROPOSTA');
+$mail->FromName = Zend_Controller_Front::getInstance()->getParam('EMPRESA_REMETENTE');
+
+$mail->Subject = montaTituloEmail($str_titulo_email);
+
+$mail->Body = $teste;
+$mail->AddAddress('anderson@rhizatech.com.br', 'Anderson');
+//$mail->AddAddress('srodrigues.anderson@gmail.com', 'Anderson');
+if ( !$mail->Send() ) {
+    throw new Excetption($mail->ErrorInfo);
+}
+desativacao_gratis
+desativacao_premium
+pre_desativacao
+/*
+$teste = VWEmpresasPublicadas::montaEmailRelatorio('8471716',date(),date(),"relatorio");
+echo"<pre>".__FILE__.":".__LINE__."\n";print_r($teste);echo"</pre>";
+*/
+?>
+<?php echo $this->render('baixo.phtml'); ?>
+<?php 
+/*
+<form id="frm_contato" action="<?php echo $this->controller; ?>/add" method="post">
+    <fieldset>
+        <ol>
+            <li>
+                <label for="str_nome">Nome:</label>
+                <input type="text" name="str_nome" id="str_nome" value="" />
+            </li>
+            <li>
+                <label for="str_email">Email:</label>
+                <input type="text" name="str_email" id="str_email" value="" />
+            </li>
+            <li>
+                <label for="str_telefone">Telefone:</label>
+                <input type="text" name="str_telefone" id="str_telefone" value="" />
+            </li>
+            <li>
+                <label for="str_nome_empresa">Nome da Empresa</label>
+                <input type="text" name="str_nome_empresa" id="str_nome_empresa" value="" />
+            </li>
+            <li>
+                <label for="str_assunto">Assunto:</label>
+                <input type="text" name="str_assunto" id="str_assunto" value="" />
+            </li>
+            <li>
+                <label for="txt_mensagem">Mensagem:</label>
+                <textarea name="txt_mensagem" cols="20" rows="10" id="txt_mensagem" ></textarea>
+            </li>
+            <li class="botoes">
+                <div class="ajax">
+                    <img src="<?php echo $this->baseUrl; ?>/public/default/images/loader.gif" alt="Enviando..." id="iLoader"/> 
+                    <div id='resposta'></div>
+                </div>
+                <input type="submit" name="str_acao" id="str_acao" value="" />
+            </li>
+        </ol>
+    </fieldset>
+</form>
+*/
+?>

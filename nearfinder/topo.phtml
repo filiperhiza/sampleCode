@@ -1,0 +1,607 @@
+<?php
+ $bln_fit = !($this->controller == 'index' && $this->action == 'index');
+ $bln_fit = true;
+?>
+<!DOCTYPE html>
+<html lang="<?php echo str_replace("_","-",Zend_Registry::get('Zend_Locale')->toString()); ?>">  
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="theme-color" content="<?php echo (( !IS_YELLOW )?'#0a86c8':'#ffcd00'); ?>">
+
+
+
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Encode+Sans:400,500,600" rel="stylesheet">
+
+
+
+
+
+
+    <?php if ( !$this->user && !IS_DEV && file_exists( $_SERVER['DOCUMENT_ROOT'] . '/public/default/assets/default-min.' . JS_CSS_VERSION . '.css' ) ) { ?>
+        <link rel="stylesheet" type="text/css" href="<?php echo Zend_Controller_Front::getInstance()->getParam('SITE_HTTP_STATIC'); ?>/public/default/assets/default-min.<?php echo JS_CSS_VERSION; ?>.css?a=<?php echo filemtime($_SERVER['DOCUMENT_ROOT'] . '/public/default/assets/default-min.' . JS_CSS_VERSION . '.css'); ?>"/>
+        <?php 
+        /*
+        <noscript id="deferred-styles">
+            <link rel="stylesheet" type="text/css" href="<?php echo Zend_Controller_Front::getInstance()->getParam('SITE_HTTP_STATIC'); ?>/public/default/assets/default-min.<?php echo JS_CSS_VERSION; ?>.css?a=<?php echo filemtime($_SERVER['DOCUMENT_ROOT'] . '/public/default/assets/default-min.' . JS_CSS_VERSION . '.css'); ?>"/>
+        </noscript>
+        <script>
+              var loadDeferredStyles = function() {
+                var addStylesNode = document.getElementById("deferred-styles");
+                var replacement = document.createElement("div");
+                replacement.innerHTML = addStylesNode.textContent;
+                document.body.appendChild(replacement)
+                addStylesNode.parentElement.removeChild(addStylesNode);
+              };
+              var raf = requestAnimationFrame || mozRequestAnimationFrame ||
+                  webkitRequestAnimationFrame || msRequestAnimationFrame;
+              if (raf) raf(function() { window.setTimeout(loadDeferredStyles, 0); });
+              else window.addEventListener('load', loadDeferredStyles);
+        </script>
+        */?>
+    <?php } else { 
+        $rr_css = Layout::getCssList();
+        foreach( $rr_css as $css ) { ?>
+            <link rel="stylesheet" href="<?php echo Zend_Controller_Front::getInstance()->getParam('SITE_HTTP_STATIC'); ?><?php echo $css . "?time=" . time(); ?>">
+        <? } ?>
+    <?php } ?>
+
+    <?php if ( IS_YELLOW ) { ?>
+        <link rel="stylesheet" href="<?php echo Zend_Controller_Front::getInstance()->getParam('SITE_HTTP_STATIC'); ?>/public/default/assets/css/theme-colors/yellow.css">
+    <?php } ?>
+    <?php
+    //SEO and pagination
+    if ( isset( $this->paginacao ) && isset( $this->pg ) ) {
+        $this->pg->getMetaPags();
+    }
+    ?>
+    <link rel="alternate" hreflang="x-default" href="https:<?php echo Zend_Controller_Front::getInstance()->getParam('SITE_HTTP'); ?>">
+    <link rel="canonical" href="https://<?php echo Zend_Controller_Front::getInstance()->getParam('SITE_DOMAIN') . (( isset( $_SERVER['REDIRECT_URL'] ) && $_SERVER['REDIRECT_URL'] != '' ) ? $_SERVER['REDIRECT_URL']: '') . (( isset( $_GET['p'] ) && $_GET['p'] != '' )?"?p=" . $_GET['p']:''); ?>" >
+    <?php
+    
+    global $rr_languages_enabled, $rr_languages_enabled_aux;
+    $rr_langs = array();
+    foreach( $rr_languages_enabled_aux as $code => $lingua ) {
+        $rr_langs[substr($code,0,2)] = true;
+        ?>
+        <link rel="alternate" hreflang="<?php echo strtolower($code); ?>" href="https://<?php echo strtolower($code); ?>.<?php echo Zend_Controller_Front::getInstance()->getParam('SITE_DOMAIN') . (( isset( $_SERVER['REDIRECT_URL'] ) && $_SERVER['REDIRECT_URL'] != '' ) ? $_SERVER['REDIRECT_URL']: ''); ?>" >
+    <? } ?>
+    <?php
+    /* foreach( $rr_langs as $code => $lingua ) {
+        <link rel="alternate" hreflang="<?php echo strtolower($code); ?>" href="<?php echo substr(Zend_Controller_Front::getInstance()->getParam('SITE_HTTP'), 0, -1) . (( isset( $_SERVER['REDIRECT_URL'] ) && $_SERVER['REDIRECT_URL'] != '' ) ? $_SERVER['REDIRECT_URL']: '') . "?lang=" . strtolower($code); ?>" />
+    }
+    ?>
+    
+    ?>
+    <style>
+        <?php echo file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/public/default/assets/default-critical-min." . JS_CSS_VERSION . ".css"); ?>
+    </style>
+    <?php
+    */
+    
+    /*
+    <!--[if lt IE 9]><link rel="stylesheet" href="<?php echo Zend_Controller_Front::getInstance()->getParam('SITE_HTTP_STATIC'); ?>/public/default/css/sky-forms-ie8.css"><![endif]-->
+    Retirei isso do tÃƒÂ­tulo
+    echo (( $this->controller != 'index' ) ? $this->escape( Zend_Controller_Front::getInstance()->getParam('SITE_TITULO') ) : '' );
+    */
+    
+    if ( $this->titulo == '' ) {
+        $this->titulo = Zend_Controller_Front::getInstance()->getParam('SITE_TITULO');
+    }
+    
+    ?>
+    <title><?php echo $this->escape(stripslashes($this->titulo)); ?> <?php echo (( $this->titulo != "" && $this->controller != 'index' && !IS_BR )?'|':''); ?> <?php echo (( $this->controller != 'index' && !IS_BR) ? $this->escape( Zend_Controller_Front::getInstance()->getParam('SITE_TITULO') ) : '' ); ?></title>
+    <?php if ( $this->descricao != "" ) { ?>
+        <meta name="description" content="<?php echo $this->descricao; ?>" />
+    <?php } ?>
+    <?php
+    /*
+    <!-- Meta -->
+    <meta http-equiv="Content-Type" content="text/xhtml;charset=ISO-8859-1" />
+    */
+    ?>
+    <?php if ( $this->no_index || $this->no_follow ) { ?>
+        <meta name="robots" content="<?php echo (( $this->no_index ) ? "noindex" : "index" ) ?>,<?php echo (( $this->no_follow ) ? "nofollow" : "follow" ) ?>" />
+    <?php } ?>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="<?php echo Layout::getFavIcon(); ?>" />
+    <?php if( ($this->controller == 'empresa') && ($this->action == 'dadosnovo')) {
+              if ( file_exists( $_SERVER['DOCUMENT_ROOT'] . PATH_LOGOS . "thumb_" . $this->empresa->num_id . ".png") ){
+                  $img = PATH_LOGOS . 'thumb_' . $this->empresa->num_id . '.png';
+              } else {
+                  $img = '/public/default/assets/img/map_icon.png';
+              }
+              $titulo = $this->empresa->str_nome;
+          } else if ( $this->controller == 'index' && $this->action == 'index') {
+              $img = str_replace(Zend_Controller_Front::getInstance()->getParam('SITE_HTTP_STATIC'),"",Zend_Controller_Front::getInstance()->getParam('SITE_LOGO'));
+              $titulo = $this->titulo;
+          } else if ( $this->controller == 'noticias' && $this->action == 'detalhes' ) {
+              $img = PATH_IMG_NOTICIA . friendlyUrl(str_replace(".html","", $this->noticia->str_slug)) . ".jpg";
+              $titulo = $this->noticia->str_titulo;
+          }
+          
+          
+      if ( isset( $titulo ) && isset( $img ) ) { ?>
+          <meta property="og:title" content="<?php echo $titulo; ?>" /> 
+          <meta property="og:image" content="<?php echo SITE_PROTOCOL . ":" . Zend_Controller_Front::getInstance()->getParam('SITE_HTTP_STATIC') . '/public/crop.php?w=200&s=' . $img; ?>" />
+      <? } ?>
+    <?php
+    /*
+        if ( !isset( $_SESSION['fancyface']) ) {
+            $_SESSION['fancyface'] = 0;
+        } else {
+            $_SESSION['fancyface'] = 1;
+        }
+        
+        //$_SESSION['fancyface'] = 0;
+        if ( $_SESSION['fancyface'] == 0 && !IS_EN ) { ?>
+            <script type="text/javascript">
+                var open_fancy = true;
+            </script>
+        <?php }
+        */
+        
+        $bln_getgeo = true;
+        
+        if ( isset( $_SESSION['location']['lat'] ) && isset( $_SESSION['location']['lon'] ) ) {
+            $bln_getgeo = false;
+        }
+        
+        if ( $bln_getgeo ) { ?>
+            <script type="text/javascript">
+                var getgeo = true;
+            </script>
+        <?php }
+        
+        $bln_exibe_promo = true;
+        
+        if ( isset( $_SESSION['bln_fecha_promo'] ) && $_SESSION['bln_fecha_promo'] == 1 ) {
+            $bln_exibe_promo = false;
+        }
+        
+        if ( isset( $_COOKIE['recebe_mailing'] ) && $_COOKIE['recebe_mailing'] == 1 ) {
+            $bln_exibe_promo = false;
+        }
+        
+        if ( isset( $_SERVER['REDIRECT_URL'] ) && strstr( $_SERVER['REDIRECT_URL'], "funcoes/promo" ) ) {
+            $bln_exibe_promo = false;
+        }
+        
+        if ( $this->bln_landing || IS_MOBILE_AUX || $this->bln_sem_publicidade ) {
+            $bln_exibe_promo = false;
+        }
+        /*
+        if ( isset( $_GET['teste'] ) && $_GET['teste'] == 1 && $bln_exibe_promo ) {
+            $bln_exibe_promo = true;
+        }
+        */
+        
+        /*
+        if ( isset( $_GET['teste'] ) && $_GET['teste'] == 1 ) {
+            echo"<pre>".__FILE__.":".__LINE__."\n";print_r($bln_exibe_promo);echo"</pre>";
+        }
+        */
+        
+        /*
+        if ( $bln_exibe_promo ) { ?>
+            <script type="text/javascript">
+                var open_fancy_promo = true;
+            </script>
+        <?php }
+        */
+
+        $bln_exibe_promo = false;
+        
+    ?>
+    <script>
+        var show_topbar = <?php echo (( $bln_fit )?'true':'false'); ?>
+    </script>
+    <?php
+    $rr_atendimento = array('/anunciopatrocinado/planos', '/empresa/cad1', '/empresa/cad2', '/empresa/cad3', '/empresa/alt1', '/empresa/alt2', '/empresa/alt3', '/anunciopatrocinado/escolher/', '/empresa/sucessoatualizacao/', '/contato', '/empresa/selo');
+    
+    $bln_exibe_chat = false;
+    foreach( $rr_atendimento as $page ) {
+        if ( strstr( $_SERVER['REQUEST_URI'], $page ) ) {
+            $bln_exibe_chat = true;
+            break;
+        }
+    }
+    if ( $this->action == 'comochegar' || $this->bln_mapa ) { ?>
+        <script src="https://maps.google.com/maps/api/js?key=<?php echo Zend_Controller_Front::getInstance()->getParam('KEY_GOOGLE_MAPS'); ?>&amp;language=<?php echo LINGUA; ?>&amp;libraries=places" type="text/javascript"></script>
+    <? } ?>
+    <?php if( $bln_exibe_chat ) { ?>
+        <?php
+        /*
+        <script type='text/javascript'>var fc_JS=document.createElement('script');fc_JS.type='text/javascript';fc_JS.src='https://assets1.freshchat.io/production/assets/widget.js?t='+Date.now();(document.body?document.body:document.getElementsByTagName('head')[0]).appendChild(fc_JS); window._fcWidgetCode='ZN73D1ROE8';window._fcURL='https://rhizatech.freshchat.io';</script>
+        */
+        ?>
+        <!--Start of Zopim Live Chat Script-->
+        <script type="text/javascript">
+        window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=
+        d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.
+        _.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute("charset","utf-8");
+        $.src="//v2.zopim.com/?3X77gJSXUtwa82S5Na6iVuxYMTHvbGAb";z.t=+new Date;$.
+        type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
+        </script>
+        <!--End of Zopim Live Chat Script-->
+        <script type="text/javascript">
+            $zopim(function(){
+                    $zopim.livechat.setLanguage('<?php echo str_replace("-","_",LINGUA); ?>');
+                    $zopim.livechat.window.setTitle('<?php echo addslashes($this->translate->_('Como podemos lhe ajudar?')); ?>');
+                    $zopim.livechat.concierge.setName('<?php echo addslashes($this->translate->_('Fale com o GuiaJá')); ?>');
+                    $zopim.livechat.concierge.setTitle('');
+                    $zopim.livechat.badge.setText('<?php echo addslashes($this->translate->_('Fale com o GuiaJá')); ?>');
+                    $zopim.livechat.setGreetings({
+                          'online': '<?php echo addslashes($this->translate->_('Converse conosco')); ?>',
+                          'offline': '<?php echo addslashes($this->translate->_('Nos deixe uma mensagem')); ?>'
+                      });
+                    
+                    <?php if ( isset( $_SESSION['dados_cad']['num_empresa_id'] ) || $this->usuario ) {
+                        
+                        //verificando se ele estÃƒÂ¡ atualizando informaÃƒÂ§ÃƒÂ£o ou se estÃƒÂ¡ logado. Preferencia para logado
+                        if ( $this->usuario ) {
+                            $str_nome = $this->usuario->str_nome;
+                            $str_email = $this->usuario->str_email;
+                        } else {
+                            $str_nome = (( $_SESSION['dados_cad']['str_nome_responsavel'] != '' )? $_SESSION['dados_cad']['str_nome_responsavel'] : $_SESSION['dados_cad']['str_nome'] );
+                            $str_email = $_SESSION['dados_cad']['str_email_responsavel'];
+                        }
+                        /*
+                        if ( $str_nome == '' || $str_email == '' ) {
+                            throw new Exception("UsuÃƒÂ¡rio do chat invÃƒÂ¡lido");
+                            die;
+                        }
+                        */
+                        
+                        $str_note = '';
+                        if ( isset( $_SESSION['dados_cad']['num_empresa_id'] ) && $_SESSION['dados_cad']['num_empresa_id'] != '' ) {
+                            $str_note = 'Empresa ID: '.$_SESSION['dados_cad']['num_empresa_id'];
+                        }
+                        ?>
+                        $zopim.livechat.set({
+                              name: "<?php echo addslashes($str_nome); ?>",
+                              email: "<?php echo addslashes($str_email); ?>",
+                              notes: "<?php echo addslashes($str_note); ?>"
+                            });
+                    <?php } ?>
+                        
+            });
+        </script>
+    <?php } ?>
+    <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "WebSite",
+      "url": "https://<?php echo SITE_HOST; ?>",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://<?php echo SITE_HOST; ?>/funcoes/montaquerybusca?str_oque={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    
+    <?php
+    
+    $rr_same = array();
+    
+    if ( defined('LINK_YOUTUBE_PAGE') && LINK_YOUTUBE_PAGE != '' ) {
+        $rr_same[] = '"' . LINK_YOUTUBE_PAGE . '"';
+    }
+    
+    if ( defined('LINK_FACEBOOK_PAGE') && LINK_FACEBOOK_PAGE != '' ) {
+        $rr_same[] = '"' . LINK_FACEBOOK_PAGE . '"';
+    }
+    
+    if ( defined('LINK_GOOGLEPLUS_PAGE') && LINK_GOOGLEPLUS_PAGE != '' ) {
+        $rr_same[] = '"' . LINK_GOOGLEPLUS_PAGE . '"';
+    }
+    
+    if ( defined('LINK_TWITTER_PAGE') && LINK_TWITTER_PAGE != '' ) {
+        $rr_same[] = '"' . LINK_TWITTER_PAGE . '"';
+    }
+    
+    
+    ?>
+    <script type="application/ld+json">
+        {
+        "@context" : "http://schema.org",
+          "@type" : "Organization",
+          "name" : "<?php echo Zend_Controller_Front::getInstance()->getParam('EMPRESA_ID'); ?>",
+          "url" : "http://<?php echo SITE_HOST; ?>/",
+          "logo": "http:<?php echo Zend_Controller_Front::getInstance()->getParam('SITE_LOGO'); ?>"
+          <?php if ( count( $rr_same ) ) { ?>
+              ,"sameAs" : [
+                            <?php echo implode( ",", $rr_same ); ?>
+                  
+                          ] 
+          <?php } ?>
+        }
+    </script>
+    <?php if ( $this->controller == 'empresa' && $this->action == 'cad3' ) { ?>
+        <script type="text/javascript" src="<?php echo Zend_Controller_Front::getInstance()->getParam('SITE_HTTP_STATIC'); ?>/public/default/assets/plugins/jquery/jquery.min.js"></script>
+    <?php } ?>
+    <?php if ( IS_EN ) { ?>
+        <script type="text/javascript">
+            window._mNHandle = window._mNHandle || {};
+            window._mNHandle.queue = window._mNHandle.queue || [];
+            medianet_versionId = "121199"; 
+            (function() {
+                var sct = document.createElement("script"),
+                sctHl = document.getElementsByTagName("script")[0],
+                isSSL = 'https:' == document.location.protocol;
+                sct.type = "text/javascript";
+                sct.src = (isSSL ? 'https:' : 'http:') + '//contextual.media.net/dmedianet.js?cid=8CUYR7B6E' + (isSSL ? '&https=1' : '')+'';
+                sct.async = "async";
+                sctHl.parentNode.insertBefore(sct, sctHl);
+            })();
+        </script>
+    <?php } ?>
+    <?php if ( defined('TABOOLA_HEADER') && !$this->bln_sem_publicidade ) { ?>
+        <?php echo TABOOLA_HEADER; ?>
+    <?php } ?>
+</head> 
+
+<body id="<?php echo (( $this->str_body_id ) ? $this->str_body_id : $this->controller ) ?>" class="body_us" <?php echo (( $this->bln_mapa )?'style="height: 100%;"':''); ?>>
+    <?php if ( defined('ANALYTICS_TRACKING') && ANALYTICS_TRACKING != '' && !$this->user ) { ?>
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        
+          ga('create', '<?php echo ANALYTICS_TRACKING; ?>', 'auto');
+          ga('require', 'displayfeatures');
+          ga('require', 'linkid');
+          ga('send', 'pageview');
+          
+          ga('create', 'UA-23091183-27', 'auto', 'nearfinder');
+          ga('nearfinder.require', 'displayfeatures');
+          ga('nearfinder.require', 'linkid');
+          ga('nearfinder.send', 'pageview');
+        
+        </script>
+    <?php } else if ( !$this->user ) {
+        throw new Exception("Sem Analytics [" . SITE_HOST . "]");
+        die;
+    }?>
+    <!-- Header -->
+    <header id="js-header" class="u-header u-header--sticky-top u-header--toggle-section u-header--change-appearance mb-2"
+            data-header-fix-moment="100"
+            data-header-fix-effect="slide">
+      <div class="u-header__section g-transition-0_5"
+           data-header-fix-moment-exclude="g-mt-0"
+           data-header-fix-moment-classes="g-mt-minus-73 g-mt-minus-76--md">
+        <!-- Topbar -->
+        <div class="g-bg-white">
+          <div class="container-fluid g-py-15">
+            <div class="row align-items-center">
+              <div class="col-2 col-md-4 col-lg-2">
+                <!-- Logo -->
+                <a class="navbar-brand d-flex align-items-center g-color-main text-uppercase g-text-underline--none--hover" href="/">
+                  <span class="g-color-text g-font-size-35 g-line-height-0_7 g-opacity-0_4 mr-4"><i class="icon-real-estate-066 u-line-icon-pro"></i></span>
+                  <span class="d-block g-hidden-sm-down g-font-weight-600 g-line-height-1_4">
+                    <?php echo Zend_Controller_Front::getInstance()->getParam('EMPRESA_ID'); ?>
+                    <span class="d-block g-color-text g-font-size-10 text-center"><?php echo Zend_Controller_Front::getInstance()->getParam('SITE_TITULO'); ?></span>
+                  </span>
+                </a>
+                <!-- End Logo -->
+              </div>
+              <div class="col-lg-4 g-hidden-md-down">
+                <!-- Social Icons -->
+                <ul class="list-inline d-flex align-items-center ml-3 mb-0">
+                    <?php if ( defined('LINK_FACEBOOK_PAGE') && LINK_FACEBOOK_PAGE != ""  ) { ?>
+                      <li class="list-inline-item g-mx-2">
+                        <a class="u-icon-v3 u-icon-size--xs g-color-gray-dark-v5 g-color-white--hover g-bg-transparent g-bg-primary-dark-v1--hover" href="<?php echo LINK_FACEBOOK_PAGE; ?>">
+                          <i class="fa fa-facebook"></i>
+                        </a>
+                      </li>
+                  <?php } ?>
+                  <?php if ( defined('LINK_TWITTER_PAGE') && LINK_TWITTER_PAGE != "" ) { ?>
+                      <li class="list-inline-item g-mx-2">
+                        <a class="u-icon-v3 u-icon-size--xs g-color-gray-dark-v5 g-color-white--hover g-bg-transparent g-bg-primary-dark-v1--hover" href="<?php echo LINK_TWITTER_PAGE; ?>">
+                          <i class="fa fa-twitter"></i>
+                        </a>
+                      </li>
+                  <?php } ?>
+                  <?php if ( defined('LINK_YOUTUBE_PAGE') && LINK_YOUTUBE_PAGE != "" ) { ?>
+                      <li class="list-inline-item g-mx-2">
+                        <a class="u-icon-v3 u-icon-size--xs g-color-gray-dark-v5 g-color-white--hover g-bg-transparent g-bg-primary-dark-v1--hover" href="<?php echo LINK_YOUTUBE_PAGE; ?>">
+                          <i class="fa fa-youtube"></i>
+                        </a>
+                      </li>
+                  <?php } ?>
+                  <?php if ( defined('LINK_GOOGLEPLUS_PAGE') && LINK_GOOGLEPLUS_PAGE != "" ) { ?>
+                      <li class="list-inline-item g-mx-2">
+                        <a class="u-icon-v3 u-icon-size--xs g-color-gray-dark-v5 g-color-white--hover g-bg-transparent g-bg-primary-dark-v1--hover" href="<?php echo LINK_GOOGLEPLUS_PAGE; ?>">
+                          <i class="fa fa-google-plus"></i>
+                        </a>
+                      </li>
+                  <?php } ?>
+                  <li class="list-inline-item mr-5"></li>
+                </ul>
+                <!-- End Social Icons -->
+              </div>
+              <div class="col-10 col-md-8 col-lg-6 ml-auto">
+                <!-- List -->
+                <ul class="list-inline float-right mb-0">
+                  <!-- Guide -->
+                  <li class="list-inline-item g-pos-rel g-mx-2">
+                    <a id="guide-dropdown-invoker-2" class="u-link-v5 g-color-gray-dark-v5 g-color-primary--hover g-font-weight-500 g-font-size-12 g-pa-10" href="#"
+                       aria-controls="guide-dropdown-2"
+                       aria-haspopup="true"
+                       aria-expanded="false"
+                       data-dropdown-event="hover"
+                       data-dropdown-target="#guide-dropdown-2"
+                       data-dropdown-type="css-animation"
+                       data-dropdown-duration="0"
+                       data-dropdown-hide-on-scroll="true"
+                       data-dropdown-animation-in="fadeIn"
+                       data-dropdown-animation-out="fadeOut">
+                      <?php echo getIdiomaAtual(); ?> <?php echo $rr_languages_enabled_aux[LINGUA]; ?> <i class="fa fa-check"></i>
+                      <i class="ml-2 fa fa-angle-down"></i>
+                    </a>
+                    <ul id="guide-dropdown-2" class="list-unstyled u-shadow-v11 g-min-width-220 g-bg-white g-pos-abs g-left-0 g-z-index-99 g-mt-28"
+                        aria-labelledby="guide-dropdown-invoker-2">
+                        <?php
+                        global $rr_bandeiras;
+                        foreach( $rr_languages_enabled_aux as $code => $lingua ) {
+                            if ( LINGUA == $code || !isset( $rr_bandeiras[$code] ) ) {
+                                continue;
+                            }
+
+                            if ( !IS_DEV ) {
+                                $str_link_lingua = '//' . strtolower($code) . '.' . Zend_Controller_Front::getInstance()->getParam('SITE_DOMAIN') . (( isset( $_SERVER['REDIRECT_URL'] ) && $_SERVER['REDIRECT_URL'] != '' ) ? $_SERVER['REDIRECT_URL']: '');
+                            } else {
+                                $str_link_lingua = "/funcoes/trocalingua/?str_lang=" . $code . "&str_retorno=" . (( isset( $_SERVER['REDIRECT_URL'] ) && $_SERVER['REDIRECT_URL'] != '' ) ? urlencode($_SERVER['REDIRECT_URL']): '');
+                            }
+
+                            ?>
+                            <li class="dropdown-item g-px-5">
+                                <a class="nav-link g-color-text g-font-weight-600" href="<?php echo $str_link_lingua; ?>">
+                                  <i class="<?php echo $rr_bandeiras[$code]; ?>"></i> <?php echo $lingua; ?>
+                                </a>
+                            </li>
+                        <?php } ?>
+                    </ul>
+                  </li>
+                  <!-- End Guide -->
+
+                  <li class="list-inline-item g-hidden-xs-down g-mx-2">
+                    <span class="g-color-gray-light-v1 g-pos-rel g-top-minus-1">|</span>
+                  </li>
+                  <li class="list-inline-item g-hidden-xs-down g-mx-2">
+                    <a class="u-link-v5 g-color-green g-color-success--hover g-font-weight-500 g-font-size-12 g-pa-10" href="/empresa/cad?c=1" >
+                      <i class="fa fa-magic"></i>
+                      <?php echo $this->translate->_('Anuncie'); ?>
+                    </a>
+                  </li>
+                  <li class="list-inline-item g-hidden-xs-down g-mx-2">
+                    <span class="g-color-gray-light-v1 g-pos-rel g-top-minus-1">|</span>
+                  </li>
+                  <li class="list-inline-item">
+                    <a class="u-link-v5 g-color-main g-color-white--hover g-bg-secondary g-bg-primary-dark-v1--hover g-font-weight-500 g-px-15 g-py-10" href="/usuario"><?php echo $this->translate->_('Cadastre-se'); ?></a>
+                  </li>
+                  <li class="list-inline-item">
+                    <a class="u-link-v5 g-color-white g-bg-primary g-bg-primary-dark-v1--hover g-font-weight-500 g-px-15 g-py-10" href="/usuario"><?php echo $this->translate->_('Entrar'); ?></a>
+                  </li>
+                </ul>
+                <!-- End List -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End Topbar -->
+
+        <nav class="js-mega-menu navbar navbar-expand-lg g-brd-y g-brd-2 g-brd-primary-dark-v1 g-bg-primary g-pa-0">
+          <div class="container-fluid">
+            <!-- Responsive Toggle Button -->
+            <button class="navbar-toggler navbar-toggler-right btn g-line-height-1 g-brd-none g-pa-0" type="button"
+                    aria-label="Toggle navigation"
+                    aria-expanded="false"
+                    aria-controls="navBar"
+                    data-toggle="collapse"
+                    data-target="#navBar">
+              <span class="hamburger hamburger--slider g-px-0">
+                <span class="hamburger-box">
+                  <span class="hamburger-inner"></span>
+                </span>
+              </span>
+            </button>
+            <!-- End Responsive Toggle Button -->
+
+            <div class="col-4 order-lg-1">
+              <!-- Search Form -->
+              <form id="searchform-1" class="pl-2 g-min-width-400--sm g-min-width-315--xl g-brd-primary-dark-v1 g-pos-rel" action="/funcoes/montaquerybusca">
+                <div class="form-row">
+                    <div class="col">
+                        <input class="typeahead_oque form-control w-100 g-brd-transparent g-color-white g-bg-transparent g-font-size-13 g-pl-25 g-py-18" type="text" name="str_oque" placeholder="<?php echo $this->translate->_('O que você está procurando?'); ?>" value="" data-provide="typeahead" autocomplete="off">
+                    </div> 
+                    <div class="col">
+                        <input class="typeahead_onde form-control w-100 g-brd-transparent g-color-white g-bg-transparent g-font-size-13 g-pl-25 g-py-18" type="text" name="str_onde" placeholder="<?php echo $this->translate->_('Em que cidade?'); ?>" value="" data-provide="typeahead" autocomplete="off">
+                    </div>
+                    <div class="col-1">
+                        <button class="btn u-btn-blue g-color-white g-pos-abs g-top-10" type="submit"><i class="fa fa-search"></i></button>
+                    </div>
+                </div>
+              </form>
+              <!-- End Search Form -->
+            </div>
+            <!-- Navigation -->
+            <div id="navBar" class="collapse navbar-collapse align-items-center order-lg-last g-brd-top g-brd-none--lg g-brd-primary-dark-v1">
+              <ul class="navbar-nav g-py-30 g-py-0--lg">
+                <?php
+                $CatsTopo = Categoria::getCatsTopo( @$this->Cidade->num_id, 8 );
+
+                foreach( $CatsTopo as $cat ) { 
+
+                    //verificando se tem bairro
+                    //$rr_bairros = $Categoria->getBairros( $cat->num_id, @$this->Cidade->num_id, 10 )
+                    //$rr_bairros = array();
+                    ?>
+                    <li class="nav-item">
+                        <a class="nav-link g-color-white g-brd-x--lg g-brd-primary-dark-v1 g-bg-primary-dark-v1--hover g-font-weight-600 g-font-size-default g-px-17 g-px-23--xl g-py-15" href="/<?php echo LINK_BUSCA; ?>/<?php echo COMP_BUSCA . strtolower(friendlyUrl($cat->str_busca)) . "+" . $this->Estado->str_slug . "+" . $this->Cidade->str_slug; ?>.html">
+                            <?php echo (( $cat->str_icon != '' )?'<i class="fa ' . $cat->str_icon . '"></i> ':'') .  $cat->str_exibe; ?>
+                        </a>
+                    </li>
+                <?php } ?>
+                <!-- NearMe - Submenu -->
+                <li class="nav-item hs-has-sub-menu">
+                  <a id="nav-link--page" class="nav-link g-color-white g-brd-right--lg g-brd-primary-dark-v1 g-bg-primary-dark-v1--hover g-font-weight-600 g-font-size-default g-px-17 g-px-23--xl g-py-15" href="#"
+                     aria-haspopup="true"
+                     aria-expanded="false"
+                     aria-controls="nav-submenu--page">
+                    <i class="fa fa-map-marker" aria-hidden="true"></i> <?php echo $this->translate->_('Perto de mim'); ?>
+                  </a>
+
+                  <!-- Submenu -->
+                  <ul id="nav-submenu--page" class="hs-sub-menu list-unstyled u-shadow-v11 g-min-width-220 g-mt-2"
+                      aria-labelledby="nav-link--page">
+
+                      <?php 
+                      
+                      $CatsTopo2 = Categoria::getCatsTopo( @$this->Cidade->num_id, 10 );
+                
+                      foreach( $CatsTopo2 as $cat ) { ?>
+                          <li class="dropdown-item">
+                              <a class="nav-link g-color-text g-font-weight-600" href="/<?php echo LINK_NEAR . "/" . COMP_BUSCA . friendlyUrl( $cat->str_nome, "-" ); ?>.html?q=<?php echo str_replace("-", "+", friendlyUrl( $cat->str_nome, "-" )); ?>"><?php echo (( $cat->str_icon != '' )?'<i class="fa ' . $cat->str_icon . '"></i> ':'') .  $cat->str_nome; ?></a>
+                          </li>
+                      <?php } ?> 
+                  </ul>
+                  <!-- End Submenu -->
+                </li>
+                <!-- End Agents - Submenu -->
+              </ul>
+            </div>
+            <!-- End Navigation -->
+          </div>
+        </nav>
+      </div>
+    </header>
+    <!-- End Header -->
+
+    <!-- Content -->
+    <main>
+        <?php if ( count($this->migalha) && !IS_MOBILE ) : ?>
+            <?php monta_migalha($this->migalha); ?>
+        <?php endif; ?>
+        <?php if ( !$this->bln_sem_publicidade ) { ?>
+            <div class="container-fluid mb-2">
+                <div class="publicidade text-center">
+                    <!-- Topo Full Novo2 -->
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-2051305834842170"
+                         data-ad-slot="5050982804"
+                         data-ad-format="auto"></ins>
+                    <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
+            </div>
+        <?php } ?>
+        <div class="container g-pos-rel g-z-index-1">

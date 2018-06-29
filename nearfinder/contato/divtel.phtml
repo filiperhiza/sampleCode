@@ -1,0 +1,11 @@
+<div class="help_chat img_chat">
+    <img src="<?php echo Zend_Controller_Front::getInstance()->getParam('SITE_HTTP_STATIC'); ?>/public/default/images/people_chat.png" id="people_help" alt="Atendimento"/>
+</div>
+<div class="help_chat">
+    <button type="button" class="close">×</button>
+    <div class="info_help">
+        <h2><?php echo $this->translate->_('Precisa de Ajuda?'); ?></h2>
+        <?php echo $this->translate->_('Ligue no telefone abaixo e fale com nossa equipe de suporte.'); ?>
+        <h2><?php echo Zend_Controller_Front::getInstance()->getParam('SITE_TELEFONE'); ?></h2>
+    </div>    
+</div>
